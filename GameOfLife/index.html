@@ -34,23 +34,11 @@
 <body>
     <table id="grid" class="grid" />
 
-    <!--<table class="grid">
-        <tr class="gridRow">
-            <td class="cell"></td>
-            <td class="cell"></td>
-            <td class="cell"></td>
-            <td class="cell alive"></td>
-            <td class="cell"></td>
-            <td class="cell"></td>
-            <td class="cell"></td>
-            <td class="cell"></td>
-        </tr>
-
-    </table>-->
-
     <script type="text/javascript">
         (function () {
             game.draw();
+
+            setInterval(game.iterate, 100);
         })();
     </script>
 
