@@ -10,20 +10,78 @@
 </head>
 
 <body>
-    <a href="" class="button1">Button</a>
+    <div style="width: 100%; margin: 20px 0px 20px 0px">
+        <a href="" id="btnStartStop" class="button1">Start</a>
+        <a href="" id="btnClear" class="button1">Clear</a>
 
-    <div id="container" />
+        <span style="margin-left: 50px">Iterations: </span>
+        <span id="spanIterationsCounter">0</span>
+
+        <span style="margin-left: 50px">Alive cells: </span>
+        <span id="spanAliveCounter">0</span>
+
+        <span style="margin-left: 50px">Dead cells: </span>
+        <span id="spanDeadCounter">0</span>
+    </div>
+
+    <div id="container" class="container" />
 
     <script type="text/javascript">
-        (function () {
-            var game = gameOfLife("container", {
-                interval: 500,
-                rows: 100,
-                columns: 80
-            });
+        /************* BEGIN OF Game Stuff *************/
+        var game;
 
-            game.start();
+        var refreshCounters = function (args) {
+            console.log(args);
+
+            document.getElementById("spanIterationsCounter").innerText = args.iterationsCounter;
+            document.getElementById("spanAliveCounter").innerText = args.aliveCellsNumber;
+            document.getElementById("spanDeadCounter").innerText = args.deadCellsNumber;            
+        };
+
+        (function () {
+            game = gameOfLife("container", {
+                interval: 500,
+                rows: 40,
+                columns: 60,
+                onIterationEndCallback: refreshCounters
+            });
         })();
+
+        var start = function () {
+            game.start()
+            document.getElementById("btnStartStop").innerText = "Stop";
+        };
+
+        var stop = function () {
+            game.stop()
+            document.getElementById("btnStartStop").innerText = "Start";
+        };
+        /************* END OF Game Stuff *************/
+
+
+        /************* BEGIN OF UI Stuff *************/
+        var btnStartStop_onClick = function () {
+            var button = document.getElementById("btnStartStop");
+
+            var action = button.innerText == "Start" ? start : stop;
+            action();
+
+            return false;
+        };
+
+        var btnClear_onClick = function () {
+            game.clear();
+            stop();
+
+            return false;
+        };
+
+        var addButtonHandlers = function () {
+            document.getElementById("btnStartStop").onclick = btnStartStop_onClick;
+            document.getElementById("btnClear").onclick = btnClear_onClick;
+        }();
+            /************* END OF UI Stuff *************/
+
     </script>
 
 </body>

@@ -30,6 +30,9 @@ const GRID_ID = "grid";
 ////  End of of Private variables 
 
 var gameOfLife = function (divContainerId, options) {
+    var intervalId = null;
+    var iterationsCounter = 0;
+
     /**
      * Sets the default configuration options
      * */
@@ -42,8 +45,21 @@ var gameOfLife = function (divContainerId, options) {
         options.interval ??= 500;
         options.rows ??= 50;
         options.columns ??= 80;
-        options.iterationCallback = null;
+        options.onIterationEndCallback ??= null;
     }();
+
+    /**
+     * Adds grid events
+     * */
+    var addGridEvents = function (tableElement) {
+        var toggleCell = function (e) {
+            if (e.target && e.target.nodeName == "TD") {
+                e.target.classList.toggle(ALIVE_CLASS);
+            }
+        };
+
+        tableElement.addEventListener("click", toggleCell);
+    };
 
     /**
      * Creates the grid
@@ -54,8 +70,6 @@ var gameOfLife = function (divContainerId, options) {
         var table = document.createElement("table");
         table.classList.add("grid");
 
-
-        //var table = document.getElementById(GRID_ID);
         for (var i = 0; i < options.rows; i++) {
             var row = table.insertRow();
             row.className = "gridRow";
@@ -71,20 +85,52 @@ var gameOfLife = function (divContainerId, options) {
             }
         }
 
-        table.addEventListener("click", function (e) {
-            if (e.target && e.target.nodeName == "TD") {
-                e.target.classList.toggle(ALIVE_CLASS);
-            }
-        });
-
+        addGridEvents(table);
         container.appendChild(table);
-    }();   
+    }();
 
     /**
      * Starts iterating with the specified interval.
      * */
     var startInternal = function () {
-        setInterval(iterate, options.interval);
+        intervalId = setInterval(iterate, options.interval);
+    };
+
+    /**
+    * Stops the iterations.
+    * */
+    var stopInternal = function () {
+        clearInterval(intervalId);        
+    };
+
+    /**
+    * Clears the grid.
+    * */
+    var clearInternal = function () {
+        Array.from(document.querySelectorAll("td.cell")).forEach(function (el) {
+            el.classList.remove(ALIVE_CLASS);
+        });
+
+        iterationsCounter = 0;
+        onIterationEnd();
+    };
+
+    /**
+    * At the end of an iteration, it calls this
+    * */
+    var onIterationEnd = function () {
+        var aliveCellsNumber = document.querySelectorAll("td.cell." + ALIVE_CLASS).length;
+        var deadCellsNumber = document.querySelectorAll("td.cell:not(." + ALIVE_CLASS + ")").length;
+
+        var args = {
+            iterationsCounter,
+            aliveCellsNumber,
+            deadCellsNumber
+        };
+
+        if (options.onIterationEndCallback != null) {
+            options.onIterationEndCallback(args);
+        }
     };
 
     /**
@@ -132,6 +178,9 @@ var gameOfLife = function (divContainerId, options) {
         for (var i = 0; i < cellsToLive.length; i++) {
             cellsToLive[i].classList.add(ALIVE_CLASS);
         }
+
+        iterationsCounter++;
+        onIterationEnd();
     };
 
     /**
@@ -170,6 +219,8 @@ var gameOfLife = function (divContainerId, options) {
      * 
      ********************************************/
     return {
-        start: startInternal
+        start: startInternal,
+        stop: stopInternal,
+        clear: clearInternal
     };
 };
