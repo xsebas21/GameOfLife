@@ -1,25 +1,25 @@
 ﻿///// Begin of Configs
-var initialAliveCells = [
-    "5-5", "5-6",
-    "6-5", "6-6",
+var INITIAL_ALIVE_CELLS = [
+    [5, 5], [5, 6],
+    [6, 5], [6, 6],
 
-    "7-29",
-    "8-28", "8-29", "8-30",
+    [7, 29],
+    [8, 28], [8, 29], [8, 30],
 
     // Glider
-    "15-15", "15-16", "15-17",
-    "16-15",
-    "17-16",
+    [15, 15], [15, 16], [15, 17],
+    [16, 15],
+    [17, 16],
 
     // Glider 2
-    "5-41",
-    "6-39", "6-41",
-    "7-40", "7-41",
+    [5, 41],
+    [6, 39], [6, 41],
+    [7, 40], [7, 41],
 
     // blinker
-    "4-16",
-    "5-16",
-    "6-16"
+    [4, 16],
+    [5, 16],
+    [6, 16]
 ];
 ///// End of Configs
 
@@ -45,6 +45,7 @@ var gameOfLife = function (divContainerId, options) {
         options.interval ??= 500;
         options.rows ??= 50;
         options.columns ??= 80;
+        options.initialAlive ??= INITIAL_ALIVE_CELLS;
         options.onIterationEndCallback ??= null;
     }();
 
@@ -61,10 +62,32 @@ var gameOfLife = function (divContainerId, options) {
         tableElement.addEventListener("click", toggleCell);
     };
 
+    var addInitialAliveCells = function (currentCell) {
+        //if (initialAliveCells.indexOf(cell.id) > -1) {
+        //    cell.classList.add(ALIVE_CLASS);
+        //}
+
+        var parsedInitialCells = options.initialAlive.map(function (singleCellArray) {
+            return singleCellArray[0].toString() + "-" + singleCellArray[1].toString();
+        });
+
+
+        if (parsedInitialCells.indexOf(currentCell.id) > -1) {
+            currentCell.classList.add(ALIVE_CLASS);
+        }
+    }
+
+    var adjustGridStyles = function (container, table) {
+        var cellSizePx = 20;
+        var minWidth = options.columns * cellSizePx;
+        var minHeight = options.rows * cellSizePx;
+
+        container.classList.add("gridContainer");
+    }
     /**
      * Creates the grid
      * */
-    var createGrid_autoCalled = function () {
+    var createGrid_autoCalled = function (container, table) {
         var container = document.getElementById(divContainerId);
 
         var table = document.createElement("table");
@@ -79,12 +102,11 @@ var gameOfLife = function (divContainerId, options) {
                 cell.id = i + ID_SEPARATOR + j;
                 cell.className = "cell";
 
-                if (initialAliveCells.indexOf(cell.id) > -1) {
-                    cell.classList.add(ALIVE_CLASS);
-                }
+                addInitialAliveCells(cell);
             }
         }
 
+        adjustGridStyles(container, table);
         addGridEvents(table);
         container.appendChild(table);
     }();
@@ -100,7 +122,7 @@ var gameOfLife = function (divContainerId, options) {
     * Stops the iterations.
     * */
     var stopInternal = function () {
-        clearInterval(intervalId);        
+        clearInterval(intervalId);
     };
 
     /**
