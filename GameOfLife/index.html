@@ -12,16 +12,20 @@
 <body>
     <div style="width: 100%; margin: 20px 0px 20px 0px">
         <a href="" id="btnStartStop" class="button1">Start</a>
+        <a href="" id="btnNext" class="button1">Next</a>
         <a href="" id="btnClear" class="button1">Clear</a>
 
-        <span style="margin-left: 50px">Iterations: </span>
-        <span id="spanIterationsCounter">0</span>
+        <span class="counter-label">Generation: </span>
+        <span id="spanGeneration" class="counter-number">0</span>
 
-        <span style="margin-left: 50px">Alive cells: </span>
-        <span id="spanAliveCounter">0</span>
+        <span class="counter-label">Population: </span>
+        <span id="spanPopulation" class="counter-number">0</span>
 
-        <span style="margin-left: 50px">Dead cells: </span>
-        <span id="spanDeadCounter">0</span>
+        <span class="counter-label">Dead cells: </span>
+        <span id="spanDeads" class="counter-number">0</span>
+
+        <span class="counter-label">Max Population: </span>
+        <span id="spanMaxPopulation" class="counter-number">0</span>
     </div>
 
     <div id="container"/>
@@ -33,14 +37,15 @@
         var refreshCounters = function (args) {
             console.log(args);
 
-            document.getElementById("spanIterationsCounter").innerText = args.iterationsCounter;
-            document.getElementById("spanAliveCounter").innerText = args.aliveCellsNumber;
-            document.getElementById("spanDeadCounter").innerText = args.deadCellsNumber;
+            document.getElementById("spanGeneration").innerText = args.generation;
+            document.getElementById("spanPopulation").innerText = args.population;
+            document.getElementById("spanDeads").innerText = args.deadCellsNumber;
+            document.getElementById("spanMaxPopulation").innerText = args.maxPopulation;
         };
 
         (function () {
             game = gameOfLife("container", {
-                interval: 500,
+                interval: 100,
                 rows: 40,
                 columns: 70,
                 onIterationEndCallback: refreshCounters
@@ -69,6 +74,12 @@
             return false;
         };
 
+         var btnNext_onClick = function () {
+            game.next();
+
+            return false;
+        };
+
         var btnClear_onClick = function () {
             game.clear();
             stop();
@@ -78,6 +89,7 @@
 
         var addButtonHandlers = function () {
             document.getElementById("btnStartStop").onclick = btnStartStop_onClick;
+            document.getElementById("btnNext").onclick = btnNext_onClick;
             document.getElementById("btnClear").onclick = btnClear_onClick;
         }();
             /************* END OF UI Stuff *************/

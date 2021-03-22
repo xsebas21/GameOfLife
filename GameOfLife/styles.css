@@ -8,6 +8,15 @@ span {
     color: #808080;
 }
 
+.counter-label {
+    margin-left: 20px;
+}
+.counter-number {
+    display: inline-block;
+    min-width: 40px;
+}
+
+
 a.button1 {
     display: inline-block;
     padding: 0.35em 1.2em;
@@ -21,6 +30,7 @@ a.button1 {
     color: #808080;
     text-align: center;
     transition: all 0.2s;
+    width: 100px;
 }
 
     a.button1:hover {

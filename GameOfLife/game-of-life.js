@@ -1,12 +1,15 @@
 ﻿///// Begin of Configs
 var INITIAL_ALIVE_CELLS = [
-    [5, 5], [5, 6],
-    [6, 5], [6, 6],
+    // Pantomino    
+    [18, 33], [18, 34],
+    [19, 32], [19, 33],
+    [20, 33],
 
+    // Tetris T-like 
     [7, 29],
     [8, 28], [8, 29], [8, 30],
 
-    // Glider
+    // Glider 1
     [15, 15], [15, 16], [15, 17],
     [16, 15],
     [17, 16],
@@ -30,8 +33,9 @@ const GRID_ID = "grid";
 ////  End of of Private variables 
 
 var gameOfLife = function (divContainerId, options) {
-    var intervalId = null;
-    var iterationsCounter = 0;
+    var _intervalId = null;
+    var _generation = 0;
+    var _maxPopulation = 0;
 
     /**
      * Sets the default configuration options
@@ -63,10 +67,6 @@ var gameOfLife = function (divContainerId, options) {
     };
 
     var addInitialAliveCells = function (currentCell) {
-        //if (initialAliveCells.indexOf(cell.id) > -1) {
-        //    cell.classList.add(ALIVE_CLASS);
-        //}
-
         var parsedInitialCells = options.initialAlive.map(function (singleCellArray) {
             return singleCellArray[0].toString() + "-" + singleCellArray[1].toString();
         });
@@ -115,14 +115,14 @@ var gameOfLife = function (divContainerId, options) {
      * Starts iterating with the specified interval.
      * */
     var startInternal = function () {
-        intervalId = setInterval(iterate, options.interval);
+        _intervalId = setInterval(iterateInternal, options.interval);
     };
 
     /**
     * Stops the iterations.
     * */
     var stopInternal = function () {
-        clearInterval(intervalId);
+        clearInterval(_intervalId);
     };
 
     /**
@@ -133,7 +133,7 @@ var gameOfLife = function (divContainerId, options) {
             el.classList.remove(ALIVE_CLASS);
         });
 
-        iterationsCounter = 0;
+        _generation = 0;
         onIterationEnd();
     };
 
@@ -141,13 +141,18 @@ var gameOfLife = function (divContainerId, options) {
     * At the end of an iteration, it calls this
     * */
     var onIterationEnd = function () {
-        var aliveCellsNumber = document.querySelectorAll("td.cell." + ALIVE_CLASS).length;
+        var population = document.querySelectorAll("td.cell." + ALIVE_CLASS).length;
         var deadCellsNumber = document.querySelectorAll("td.cell:not(." + ALIVE_CLASS + ")").length;
 
+        if (population > _maxPopulation) {
+            _maxPopulation = population;
+        }
+
         var args = {
-            iterationsCounter,
-            aliveCellsNumber,
-            deadCellsNumber
+            generation: _generation,
+            population: population,
+            deadCellsNumber: deadCellsNumber,
+            maxPopulation: _maxPopulation
         };
 
         if (options.onIterationEndCallback != null) {
@@ -158,7 +163,7 @@ var gameOfLife = function (divContainerId, options) {
     /**
     * Executes a single iteration
     * */
-    var iterate = function () {
+    var iterateInternal = function () {
         var cellsToKilll = [];
         var cellsToLive = [];
 
@@ -201,7 +206,7 @@ var gameOfLife = function (divContainerId, options) {
             cellsToLive[i].classList.add(ALIVE_CLASS);
         }
 
-        iterationsCounter++;
+        _generation++;
         onIterationEnd();
     };
 
@@ -243,6 +248,7 @@ var gameOfLife = function (divContainerId, options) {
     return {
         start: startInternal,
         stop: stopInternal,
-        clear: clearInternal
+        clear: clearInternal,
+        next: iterateInternal
     };
 };
