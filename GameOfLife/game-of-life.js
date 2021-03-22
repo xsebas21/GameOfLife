@@ -134,6 +134,8 @@ var gameOfLife = function (divContainerId, options) {
         });
 
         _generation = 0;
+        _maxPopulation = 0;
+
         onIterationEnd();
     };
 
