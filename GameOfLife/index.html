@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+<!--This is the full example that uses all options to initialize, configure and run the game-->
 <head>
     <meta charset="utf-8" />
     <title></title>
@@ -28,7 +29,7 @@
         <span id="spanMaxPopulation" class="counter-number">0</span>
     </div>
 
-    <div id="container"/>
+    <div id="container" />
 
     <script type="text/javascript">
         /************* BEGIN OF UI Counters *************/
@@ -43,8 +44,8 @@
         /************* END OF UI Counters *************/
 
         /************* BEGIN OF Game Stuff *************/
-        // Min game initialization: gameOfLife("container");        
-        var game;       
+        // Min game initialization: gameOfLife("container");
+        var game;
 
         (function () {
             game = gameOfLife("container", {
@@ -53,7 +54,7 @@
                 columns: 100,
                 onGenerationEndCallback: refreshCounters
             });
-        })();       
+        })();
         /************* END OF Game Stuff *************/
 
 
@@ -76,7 +77,7 @@
             return false;
         };
 
-         var btnNext_onClick = function () {
+        var btnNext_onClick = function () {
             game.next();
             return false;
         };
@@ -92,7 +93,7 @@
             document.getElementById("btnNext").onclick = btnNext_onClick;
             document.getElementById("btnClear").onclick = btnClear_onClick;
         }();
-            /************* END OF UI Stuff *************/
+                /************* END OF UI Stuff *************/
 
     </script>
 

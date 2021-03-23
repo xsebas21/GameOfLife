@@ -1,6 +1,6 @@
 ﻿///// Begin of Configs
 var INITIAL_ALIVE_CELLS = [
-    // Pantomino    
+    // R-pentomino
     [18, 33], [18, 34],
     [19, 32], [19, 33],
     [20, 33],
@@ -143,7 +143,7 @@ var gameOfLife = function (divContainerId, options) {
     /**
     * At the end of an iteration, it calls this
     * */
-    var onGenerationEnd = function () {      
+    var onGenerationEnd = function () {
 
         if (options.onGenerationEndCallback != null) {
             var population = document.querySelectorAll("td.cell." + ALIVE_CLASS).length;
@@ -151,7 +151,7 @@ var gameOfLife = function (divContainerId, options) {
 
             if (population > _maxPopulation) {
                 _maxPopulation = population;
-            }       
+            }
 
             var args = {
                 generation: _generation,
@@ -217,7 +217,7 @@ var gameOfLife = function (divContainerId, options) {
         }
 
         _generation++;
-        _generationIsInProgress = false; 
+        _generationIsInProgress = false;
         onGenerationEnd();
     };
 
