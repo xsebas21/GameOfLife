@@ -48,10 +48,10 @@
 
         (function () {
             game = gameOfLife("container", {
-                interval: 100,
-                rows: 40,
-                columns: 70,
-                onIterationEndCallback: refreshCounters
+                interval: 400,
+                rows: 60,
+                columns: 100,
+                onGenerationEndCallback: refreshCounters
             });
         })();       
         /************* END OF Game Stuff *************/

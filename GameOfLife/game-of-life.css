@@ -18,8 +18,8 @@
 
         .grid .gridRow .cell {
             border: 1.5px solid #808080;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             margin: 0;
             padding: 0;
         }

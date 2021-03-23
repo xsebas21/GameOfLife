@@ -36,6 +36,7 @@ var gameOfLife = function (divContainerId, options) {
     var _intervalId = null;
     var _generation = 0;
     var _maxPopulation = 0;
+    var _generationIsInProgress = false;
 
     /**
      * Sets the default configuration options
@@ -50,7 +51,7 @@ var gameOfLife = function (divContainerId, options) {
         options.rows ??= 50;
         options.columns ??= 80;
         options.initialAlive ??= INITIAL_ALIVE_CELLS;
-        options.onIterationEndCallback ??= null;
+        options.onGenerationEndCallback ??= null;
     }();
 
     /**
@@ -136,29 +137,30 @@ var gameOfLife = function (divContainerId, options) {
         _generation = 0;
         _maxPopulation = 0;
 
-        onIterationEnd();
+        onGenerationEnd();
     };
 
     /**
     * At the end of an iteration, it calls this
     * */
-    var onIterationEnd = function () {
-        var population = document.querySelectorAll("td.cell." + ALIVE_CLASS).length;
-        var deadCellsNumber = document.querySelectorAll("td.cell:not(." + ALIVE_CLASS + ")").length;
+    var onGenerationEnd = function () {      
 
-        if (population > _maxPopulation) {
-            _maxPopulation = population;
-        }
+        if (options.onGenerationEndCallback != null) {
+            var population = document.querySelectorAll("td.cell." + ALIVE_CLASS).length;
+            var deadCellsNumber = document.querySelectorAll("td.cell:not(." + ALIVE_CLASS + ")").length;
 
-        var args = {
-            generation: _generation,
-            population: population,
-            deadCellsNumber: deadCellsNumber,
-            maxPopulation: _maxPopulation
-        };
+            if (population > _maxPopulation) {
+                _maxPopulation = population;
+            }       
 
-        if (options.onIterationEndCallback != null) {
-            options.onIterationEndCallback(args);
+            var args = {
+                generation: _generation,
+                population: population,
+                deadCellsNumber: deadCellsNumber,
+                maxPopulation: _maxPopulation
+            };
+
+            options.onGenerationEndCallback(args);
         }
     };
 
@@ -166,6 +168,12 @@ var gameOfLife = function (divContainerId, options) {
     * Executes a single iteration
     * */
     var iterateInternal = function () {
+        if (_generationIsInProgress) {
+            // Do nothing if there is a previous generation going on.
+            return;
+        }
+
+        _generationIsInProgress = true;
         var cellsToKilll = [];
         var cellsToLive = [];
 
@@ -187,7 +195,7 @@ var gameOfLife = function (divContainerId, options) {
                         // Nothing changes
 
                     } else if (aliveNeighbours == 3 && !currentCell.classList.contains(ALIVE_CLASS)) {
-                        // The cell becomes a live cell
+                        // The cell becomes alive
                         cellsToLive.push(currentCell);
 
                     } else if (aliveNeighbours >= 4 && currentCell.classList.contains(ALIVE_CLASS)) {
@@ -209,7 +217,8 @@ var gameOfLife = function (divContainerId, options) {
         }
 
         _generation++;
-        onIterationEnd();
+        _generationIsInProgress = false; 
+        onGenerationEnd();
     };
 
     /**
