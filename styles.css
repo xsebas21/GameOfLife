@@ -17,7 +17,7 @@ span {
 }
 
 
-a.button1 {
+a.action-button {
     display: inline-block;
     padding: 0.35em 1.2em;
     border: 0.1em solid #FFFFFF;
@@ -33,13 +33,13 @@ a.button1 {
     width: 100px;
 }
 
-    a.button1:hover {
+    a.action-button:hover {
         color: #000000;
         background-color: #FFFFFF;
     }
 
 @media all and (max-width:30em) {
-    a.button1 {
+    a.action-button {
         display: block;
         margin: 0.4em auto;
     }

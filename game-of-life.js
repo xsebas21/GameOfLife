@@ -80,10 +80,11 @@ var gameOfLife = function (divContainerId, options) {
 
     var adjustGridStyles = function (container, table) {
         var cellSizePx = 20;
-        var minWidth = options.columns * cellSizePx;
-        var minHeight = options.rows * cellSizePx;
+        var width = options.columns * cellSizePx;
+        var height = options.rows * cellSizePx;
 
         container.classList.add("gridContainer");
+        container.style.width = width + "px";
     }
     /**
      * Creates the grid
