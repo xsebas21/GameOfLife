@@ -2,7 +2,7 @@
 
 ### Pure Javascript implementation of Conway's Game of Life. 
 
-It supports customization during initialization and functions to manually Start, Stop and Iterate to the next generation.
+The game supports customization during initialization and functions to manually Start, Stop and Iterate to the next generation.
 The repo contains a full-featured example ([index.html](index.html)) and a simple implementation with no configuration or events handling ([index-simplest.html](index-simplest.html)).
 
 
@@ -16,6 +16,7 @@ Available customizations:
   - Number of rows
   - Initial alive cells
 
+##
 Example of implementation included in the source:
 ![running-game](https://user-images.githubusercontent.com/12735901/113503691-c6f32580-9509-11eb-8684-73f9de08f550.png)
 
