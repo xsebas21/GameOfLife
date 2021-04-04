@@ -17,7 +17,8 @@ Available customizations:
   - Initial alive cells
 
 Example of implementation included in the source:
-![running-game](https://user-images.githubusercontent.com/12735901/113503369-ceb1ca80-9507-11eb-9c03-c3e67fb1c802.png)
+![running-game](https://user-images.githubusercontent.com/12735901/113503691-c6f32580-9509-11eb-8684-73f9de08f550.png)
+
 
 ##
 Running game:
